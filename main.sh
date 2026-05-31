@@ -98,6 +98,7 @@ installDependency() {
             ;;
         rpm-ostree)
             "$PACKAGER" install wget2-wget webkit2gtk4.1
+            printf "%b\n" "${YELLOW}you might need to restart.${RC}"
             ;;
         apt-get|zypper)
             "$ESCALATION_TOOL" "$PACKAGER" install -y wget webkit2gtk-4.1
