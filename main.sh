@@ -71,7 +71,7 @@ checkSteamOS() {
 
 checkPackageManager() {
     ## Check Package Manager
-    PACKAGEMANAGER="pacman apt-get dnf zypper rpm-ostree apk"
+    PACKAGEMANAGER="pacman apt-get dnf zypper rpm-ostree"
     for pgm in ${PACKAGEMANAGER}; do
         if command_exists "${pgm}"; then
             PACKAGER=${pgm}
