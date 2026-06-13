@@ -52,6 +52,33 @@ checkPassword() {
 
 }
 
+isAlpine() {
+
+    . /etc/os-release</dev/tty
+    if [ $ID != "alpine" ]; then
+        return 0
+    fi
+
+    str=$(tail -n 1 /etc/apk/repositories)
+    if [[ $str == "#"* ]] && [[ $str == *"/community" ]]; then
+        new_str=${str:1}
+        echo $new_str | "$ESCALATION_TOOL" tee -a /etc/apk/repositories
+        "$ESCALATION_TOOL" apk update
+    fi
+
+    "$ESCALATION_TOOL" apk add distrobox crun
+    "$ESCALATION_TOOL" modprobe tun
+    echo tun | "$ESCALATION_TOOL" tee -a /etc/modules
+    echo ${USER}:100000:65536 | "$ESCALATION_TOOL" tee -i /etc/subuid
+    echo ${USER}:100000:65536 | "$ESCALATION_TOOL" tee -i /etc/subgid
+
+    distrobox-create --name f44 --image fedora:44
+    distrobox enter f44
+
+    return 1
+
+}
+
 checkSteamOS() {
     if ! command_exists steamos-readonly; then
         return 0
@@ -94,10 +121,10 @@ installDependency() {
             "$ESCALATION_TOOL" "$PACKAGER" -S wget webkit2gtk-4.1
             ;;
         dnf)
-            "$ESCALATION_TOOL" "$PACKAGER" install wget2-wget webkit2gtk4.1
+            "$ESCALATION_TOOL" "$PACKAGER" install -y wget2-wget webkit2gtk4.1
             ;;
         rpm-ostree)
-            "$PACKAGER" install wget2-wget webkit2gtk4.1
+            "$PACKAGER" install -y wget2-wget webkit2gtk4.1
             printf "%b\n" "${YELLOW}you might need to restart.${RC}"
             ;;
         apt-get|zypper)
@@ -138,7 +165,11 @@ setupAppLauncher() {
     mkdir -p ~/.local/bin
     cp $PWD/nightlight-linux ~/.local/bin
     mkdir -p ~/.local/share/applications
-    sh -c 'echo -e "[Desktop Entry]\nName=NightLight\nExec=$HOME/.local/bin/nightlight-linux\nTerminal=false\nType=Application" > ~/.local/share/applications/nightlight.desktop'
+    if isAlpine; then
+        sh -c 'echo -e "[Desktop Entry]\nName=NightLight\nExec=distrobox-enter -n f44 -- $HOME/.local/bin/nightlight-linux\nTerminal=false\nTy    pe=Application" > ~/.local/share/applications/nightlight.desktop'
+    else
+        sh -c 'echo -e "[Desktop Entry]\nName=NightLight\nExec=$HOME/.local/bin/nightlight-linux\nTerminal=false\nType=Application" > ~/.local/share/applications/nightlight.desktop'
+    fi
 
 }
 
@@ -158,3 +189,4 @@ userDecision() {
 checkArch
 installNightlight
 userDecision
+
