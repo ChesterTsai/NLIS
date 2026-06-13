@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 RC='\033[0m'
 RED='\033[31m'
@@ -19,6 +19,48 @@ command_exists() {
     return 0
 }
 
+isAlpine() {
+
+    . /etc/os-release</dev/tty
+    if [ $ID != "alpine" ]; then
+        return 0
+    else
+        return 1
+    fi
+
+}
+
+alpineSetup() {
+
+    str=$(tail -n 1 /etc/apk/repositories)
+    if [[ $str == "#"* ]] && [[ $str == *"/community" ]]; then
+        new_str=${str:1}
+        echo $new_str | doas tee -a /etc/apk/repositories
+        doas apk update
+    fi
+
+    doas apk add distrobox crun
+    doas modprobe tun
+    echo tun | doas tee -a /etc/modules
+    echo ${USER}:100000:65536 | doas tee -i /etc/subuid
+    echo ${USER}:100000:65536 | doas tee -i /etc/subgid
+
+    distrobox-create --name f44 --image fedora:44
+    distrobox enter f44 -- sudo dnf install -y wget2-wget webkit2gtk4.1
+
+    if [ -e nightlight-linux ]; then
+        printf "%b\n" "${RED}ERROR!${RC}"
+        printf "%b\n" "${RED}There's a file/directory named [nightlight-linux] in ${PWD},${RC}"
+        printf "%b\n" "${RED}Please rename it or remove it and run the script again${RC}"
+        printf "%b\n" "${RED}as it will conflict with the downloaded file.${RC}"
+        return 0
+    fi
+
+    distrobox enter f44 -- wget http://update.nightlight.gg/desktop/latest/linux -O nightlight-linux
+    distrobox enter f44 -- chmod +x nightlight-linux
+
+}
+
 checkEscalationTool() {
     ## Check for escalation tools.
     if [ -z "$ESCALATION_TOOL_CHECKED" ]; then
@@ -26,6 +68,10 @@ checkEscalationTool() {
             ESCALATION_TOOL="eval"
             ESCALATION_TOOL_CHECKED=true
             return 0
+        fi
+
+        if $isAlpine; then
+            ESCALATION_TOOL="distrobox enter f44 -- sudo"
         fi
 
         ESCALATION_TOOLS='sudo doas'
@@ -49,37 +95,6 @@ checkPassword() {
         printf "%b" "${YELLOW}Set a password for ${USER}, you'll need it later${RC}\n"
         "$ESCALATION_TOOL" passwd ${USER}
     done
-
-}
-
-isAlpine() {
-
-    . /etc/os-release</dev/tty
-    if [ $ID != "alpine" ]; then
-        return 0
-    else
-        return 1
-    fi
-
-}
-
-alpineSetup() {
-
-    str=$(tail -n 1 /etc/apk/repositories)
-    if [[ $str == "#"* ]] && [[ $str == *"/community" ]]; then
-        new_str=${str:1}
-        echo $new_str | "$ESCALATION_TOOL" tee -a /etc/apk/repositories
-        "$ESCALATION_TOOL" apk update
-    fi
-
-    "$ESCALATION_TOOL" apk add distrobox crun
-    "$ESCALATION_TOOL" modprobe tun
-    echo tun | "$ESCALATION_TOOL" tee -a /etc/modules
-    echo ${USER}:100000:65536 | "$ESCALATION_TOOL" tee -i /etc/subuid
-    echo ${USER}:100000:65536 | "$ESCALATION_TOOL" tee -i /etc/subgid
-
-    distrobox-create --name f44 --image fedora:44
-    distrobox enter f44 --
 
 }
 
@@ -145,9 +160,6 @@ installNightlight() {
     checkEscalationTool
     checkPassword
     checkSteamOS
-    if isAlpine; then
-        alpineSetup
-    fi
     checkPackageManager
     installDependency
 
@@ -172,7 +184,7 @@ setupAppLauncher() {
     mkdir -p ~/.local/bin
     cp $PWD/nightlight-linux ~/.local/bin
     mkdir -p ~/.local/share/applications
-    if isAlpine; then
+    if $isAlpine; then
         sh -c 'echo -e "[Desktop Entry]\nName=NightLight\nExec=distrobox-enter -n f44 -- $HOME/.local/bin/nightlight-linux\nTerminal=false\nTy    pe=Application" > ~/.local/share/applications/nightlight.desktop'
     else
         sh -c 'echo -e "[Desktop Entry]\nName=NightLight\nExec=$HOME/.local/bin/nightlight-linux\nTerminal=false\nType=Application" > ~/.local/share/applications/nightlight.desktop'
@@ -194,6 +206,10 @@ userDecision() {
 }
 
 checkArch
-installNightlight
+if ! $isAlpine; then
+    installNightlight
+else
+    alpineSetup
+fi
 userDecision
 
