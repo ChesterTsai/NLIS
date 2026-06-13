@@ -141,6 +141,7 @@ installNightlight() {
     checkEscalationTool
     checkPassword
     checkSteamOS
+    isAlpine
     checkPackageManager
     installDependency
 
