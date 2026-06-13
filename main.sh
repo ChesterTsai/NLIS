@@ -73,10 +73,6 @@ checkEscalationTool() {
             return 0
         fi
 
-        if $isAlpine; then
-            ESCALATION_TOOL="distrobox enter f44 -- sudo"
-        fi
-
         ESCALATION_TOOLS='sudo doas'
         for tool in ${ESCALATION_TOOLS}; do
             if command_exists "${tool}"; then
@@ -219,4 +215,3 @@ else
     alpineSetup
 fi
 userDecision
-
