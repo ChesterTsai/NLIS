@@ -68,6 +68,7 @@ etc.
 
 etc.
 </details>
+<details>
 <summary>Alpine</summary>
 
 - Alpine Linux (using [distrobox](https://github.com/89luca89/distrobox))
