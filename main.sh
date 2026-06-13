@@ -57,7 +57,13 @@ isAlpine() {
     . /etc/os-release</dev/tty
     if [ $ID != "alpine" ]; then
         return 0
+    else
+        return 1
     fi
+
+}
+
+alpineSetup() {
 
     str=$(tail -n 1 /etc/apk/repositories)
     if [[ $str == "#"* ]] && [[ $str == *"/community" ]]; then
@@ -73,9 +79,7 @@ isAlpine() {
     echo ${USER}:100000:65536 | "$ESCALATION_TOOL" tee -i /etc/subgid
 
     distrobox-create --name f44 --image fedora:44
-    distrobox enter f44
-
-    return 1
+    distrobox enter f44 --
 
 }
 
@@ -141,7 +145,9 @@ installNightlight() {
     checkEscalationTool
     checkPassword
     checkSteamOS
-    isAlpine
+    if isAlpine; then
+        alpineSetup
+    fi
     checkPackageManager
     installDependency
 
