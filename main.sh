@@ -41,7 +41,10 @@ alpineSetup() {
 
     doas apk add distrobox crun
     doas modprobe tun
-    echo tun | doas tee -a /etc/modules
+    mod=$(tail -n 1 /etc/modules)
+    if ! [ mod = "tun" ]; then
+        echo tun | doas tee -a /etc/modules
+    fi
     echo ${USER}:100000:65536 | doas tee -i /etc/subuid
     echo ${USER}:100000:65536 | doas tee -i /etc/subgid
 
