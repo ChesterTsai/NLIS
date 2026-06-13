@@ -22,10 +22,10 @@ command_exists() {
 isAlpine() {
 
     . /etc/os-release</dev/tty
-    if [ $ID != "alpine" ]; then
-        return 0
-    else
+    if [ $ID = "alpine" ]; then
         return 1
+    else
+        return 0
     fi
 
 }
@@ -187,7 +187,9 @@ setupAppLauncher() {
     mkdir -p ~/.local/bin
     cp $PWD/nightlight-linux ~/.local/bin
     mkdir -p ~/.local/share/applications
-    if $isAlpine; then
+    isAlpine
+    res=$?
+    if [ $res = "0" ]; then
         sh -c 'echo -e "[Desktop Entry]\nName=NightLight\nExec=distrobox-enter -n f44 -- $HOME/.local/bin/nightlight-linux\nTerminal=false\nTy    pe=Application" > ~/.local/share/applications/nightlight.desktop'
     else
         sh -c 'echo -e "[Desktop Entry]\nName=NightLight\nExec=$HOME/.local/bin/nightlight-linux\nTerminal=false\nType=Application" > ~/.local/share/applications/nightlight.desktop'
@@ -209,7 +211,9 @@ userDecision() {
 }
 
 checkArch
-if ! $isAlpine; then
+isAlpine
+res=$?
+if [ $res = "0" ]; then
     installNightlight
 else
     alpineSetup
