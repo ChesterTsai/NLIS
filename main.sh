@@ -41,8 +41,7 @@ alpineSetup() {
 
     doas apk add distrobox crun
     doas modprobe tun
-    mod=$(tail -n 1 /etc/modules)
-    if ! [ mod = "tun" ]; then
+    if ! grep -q tun /etc/modules; then
         echo tun | doas tee -a /etc/modules
     fi
     echo ${USER}:100000:65536 | doas tee -i /etc/subuid
@@ -185,7 +184,7 @@ setupAppLauncher() {
     mkdir -p ~/.local/share/applications
     isAlpine
     res=$?
-    if [ $res = "0" ]; then
+    if [ $res = "1" ]; then
         sh -c 'echo -e "[Desktop Entry]\nName=NightLight\nExec=distrobox-enter -n f44 -- $HOME/.local/bin/nightlight-linux\nTerminal=false\nTy    pe=Application" > ~/.local/share/applications/nightlight.desktop'
     else
         sh -c 'echo -e "[Desktop Entry]\nName=NightLight\nExec=$HOME/.local/bin/nightlight-linux\nTerminal=false\nType=Application" > ~/.local/share/applications/nightlight.desktop'
