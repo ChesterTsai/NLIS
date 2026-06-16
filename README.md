@@ -53,7 +53,7 @@ etc.
 <details>
  <summary>Fedora Atomic / Fedora Atomic Based Distros</summary>
 
-- Fedora Atomi
+- Fedora Atomic
 - Fedora Silver Blue
 - Fedora Kinoite
 - Bazzite
