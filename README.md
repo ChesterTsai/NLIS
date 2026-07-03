@@ -1,3 +1,6 @@
+# THIS IS NOT AN OFFICAL NIGHTLIGHT SCRIPT
+This script is NOT an offical nightlight-linux installation script, although the devoleper behind Nightlight(Boop), has acknowledged that I have made this script, and stars me for it, it's still NOT an offical supported script in any kind, take this risk into account before running it.
+
 # Caution
 Please, please please do NOT blindly trust anyone on the internet and run whatever script they give you<br>
 Read what the script does before running it<br>
@@ -27,6 +30,7 @@ or try out dev branch (not recommended)
 - CachyOS
 - EndeavourOS
 - Manjaro
+- Omarchy
 - steamOS
 
 etc.
@@ -69,7 +73,7 @@ etc.
 etc.
 </details>
 <details>
-<summary>Alpine</summary>
+<summary>Others</summary>
 
 - Alpine Linux (using [distrobox](https://github.com/89luca89/distrobox))
 
