@@ -140,7 +140,7 @@ installDependency() {
 
     case "$PACKAGER" in
         pacman)
-            "$ESCALATION_TOOL" "$PACKAGER" -Sy wget webkit2gtk-4.1
+            "$ESCALATION_TOOL" "$PACKAGER" -S wget webkit2gtk-4.1 --noconfirm
             ;;
         dnf)
             "$ESCALATION_TOOL" "$PACKAGER" install -y wget2-wget webkit2gtk4.1
