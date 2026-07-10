@@ -95,8 +95,8 @@ checkPassword() {
 
     while [ "$(passwd -S ${USER} | awk '{print $2}')" = "NP" ]
     do
-        printf "%b" "${YELLOW}Set a password for ${USER}, you'll need it later${RC}\n"
-        "$ESCALATION_TOOL" passwd ${USER}
+        printf "${YELLOW}Set a password for ${USER}, you'll need it later${RC}\n"
+        "$ESCALATION_TOOL" passwd ${USER}</dev/tty
     done
 
 }
@@ -140,7 +140,7 @@ installDependency() {
 
     case "$PACKAGER" in
         pacman)
-            "$ESCALATION_TOOL" "$PACKAGER" -S wget webkit2gtk-4.1
+            "$ESCALATION_TOOL" "$PACKAGER" -Sy wget webkit2gtk-4.1
             ;;
         dnf)
             "$ESCALATION_TOOL" "$PACKAGER" install -y wget2-wget webkit2gtk4.1
