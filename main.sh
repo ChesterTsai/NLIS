@@ -96,7 +96,7 @@ checkPassword() {
     while [ "$(passwd -S ${USER} | awk '{print $2}')" = "NP" ]
     do
         printf "%b" "${YELLOW}Set a password for ${USER}, you'll need it later${RC}\n"
-        passwd ${USER}
+        "$ESCALATION_TOOL" passwd ${USER}
     done
 
 }
