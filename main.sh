@@ -19,6 +19,27 @@ command_exists() {
     return 0
 }
 
+distroboxSetup() {
+    distrobox-create --name f44 --image fedora:44
+    distrobox enter f44 -- sudo dnf install -y wget2-wget webkit2gtk4.1
+
+    if [ -e nightlight-linux ]; then
+        printf "%b\n" "${RED}ERROR!${RC}"
+        printf "%b\n" "${RED}There's a file/directory named [nightlight-linux] in ${PWD},${RC}"
+        printf "%b\n" "${RED}Please rename it or remove it and run the script again${RC}"
+        printf "%b\n" "${RED}as it will conflict with the downloaded file.${RC}"
+        return 0
+    fi
+
+    distrobox enter f44 -- wget http://update.nightlight.gg/desktop/latest/linux -O nightlight-linux
+    distrobox enter f44 -- chmod +x nightlight-linux
+
+    printf "\n\n\n\n\n"
+    printf "%b\n" "${YELLOW}Download Completed!${RC}"
+    printf "%b\n" "${YELLOW}currently nightlight-linux in the ${PWD} directory doesn't do anything by itself.${RC}"
+    printf "%B\n" "${YELLOW}so making Nightlight show up on App Launcher is recommended on this distro.${RC}"
+}
+
 isAlpine() {
 
     . /etc/os-release</dev/tty
@@ -47,24 +68,7 @@ alpineSetup() {
     echo ${USER}:100000:65536 | doas tee -i /etc/subuid
     echo ${USER}:100000:65536 | doas tee -i /etc/subgid
 
-    distrobox-create --name f44 --image fedora:44
-    distrobox enter f44 -- sudo dnf install -y wget2-wget webkit2gtk4.1
-
-    if [ -e nightlight-linux ]; then
-        printf "%b\n" "${RED}ERROR!${RC}"
-        printf "%b\n" "${RED}There's a file/directory named [nightlight-linux] in ${PWD},${RC}"
-        printf "%b\n" "${RED}Please rename it or remove it and run the script again${RC}"
-        printf "%b\n" "${RED}as it will conflict with the downloaded file.${RC}"
-        return 0
-    fi
-
-    distrobox enter f44 -- wget http://update.nightlight.gg/desktop/latest/linux -O nightlight-linux
-    distrobox enter f44 -- chmod +x nightlight-linux
-
-    printf "\n\n\n\n\n"
-    printf "%b\n" "${YELLOW}Download Completed!${RC}"
-    printf "%b\n" "${YELLOW}currently nightlight-linux in the ${PWD} directory doesn't do anything by itself.${RC}"
-    printf "%B\n" "${YELLOW}so making Nightlight show up on App Launcher is recommended on this distro.${RC}"
+    distroboxSetup
 
 }
 
