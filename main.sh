@@ -21,57 +21,18 @@ command_exists() {
 
 distroboxSetup() {
 
+    if ! command_exists distrobox; then
+        printf "%b\n" "${RED}ERROR!${RC}"
+        printf "%b\n" "${RED}Distrobox didn't exist, ${RC}"
+        printf "%b\n" "${RED}Please install it with your package manager${RC}"
+        printf "%b\n" "${RED}and run the script again afterwards.${RC}"
+        return 0
+    fi
+
     if ! distrobox ls | grep -q "f44"; then
         distrobox-create --name f44 --image fedora:44
     fi
     distrobox enter f44 -- sudo dnf install -y wget2-wget webkit2gtk4.1
-
-    if [ -e nightlight-linux ]; then
-        printf "%b\n" "${RED}ERROR!${RC}"
-        printf "%b\n" "${RED}There's a file/directory named [nightlight-linux] in ${PWD},${RC}"
-        printf "%b\n" "${RED}Please rename it or remove it and run the script again${RC}"
-        printf "%b\n" "${RED}as it will conflict with the downloaded file.${RC}"
-        return 0
-    fi
-
-    distrobox enter f44 -- wget http://update.nightlight.gg/desktop/latest/linux -O nightlight-linux
-    distrobox enter f44 -- chmod +x nightlight-linux
-
-    printf "\n\n\n\n\n"
-    printf "%b\n" "${YELLOW}Download Completed!${RC}"
-    printf "%b\n" "${YELLOW}currently nightlight-linux in the ${PWD} directory doesn't do anything by itself.${RC}"
-    printf "%B\n" "${YELLOW}so making Nightlight show up on App Launcher is recommended on this distro.${RC}"
-}
-
-isAlpine() {
-
-    . /etc/os-release</dev/tty
-    if [ $ID = "alpine" ]; then
-        return 1
-    else
-        return 0
-    fi
-
-}
-
-alpineSetup() {
-
-    str=$(tail -n 1 /etc/apk/repositories)
-    if [[ $str == "#"* ]] && [[ $str == *"/community" ]]; then
-        new_str=${str:1}
-        echo $new_str | doas tee -a /etc/apk/repositories
-        doas apk update
-    fi
-
-    doas apk add distrobox crun
-    doas modprobe tun
-    if ! grep -q tun /etc/modules; then
-        echo tun | doas tee -a /etc/modules
-    fi
-    echo ${USER}:100000:65536 | doas tee -i /etc/subuid
-    echo ${USER}:100000:65536 | doas tee -i /etc/subgid
-
-    distroboxSetup
 
 }
 
@@ -127,7 +88,7 @@ checkSteamOS() {
 
 checkPackageManager() {
     ## Check Package Manager
-    PACKAGEMANAGER="pacman apt-get dnf zypper rpm-ostree"
+    PACKAGEMANAGER="pacman apt-get dnf zypper rpm-ostree apk"
     for pgm in ${PACKAGEMANAGER}; do
         if command_exists "${pgm}"; then
             PACKAGER=${pgm}
@@ -159,8 +120,30 @@ installDependency() {
         apt-get|zypper)
             "$ESCALATION_TOOL" "$PACKAGER" install -y wget webkit2gtk-4.1
             ;;
+        apk)
+            str=$(tail -n 1 /etc/apk/repositories)
+            if [[ $str == "#"* ]] && [[ $str == *"/community" ]]; then
+                new_str=${str:1}
+                echo $new_str | "$ESCALATION_TOOL" tee -a /etc/apk/repositories
+                "$ESCALATION_TOOL" "$PACKAGER" update
+            fi
+
+            "$ESCALATION_TOOL" "$PACKAGER" add distrobox crun --no-interactive
+            "$ESCALATION_TOOL" modprobe tun
+
+            if ! grep -q tun /etc/modules; then
+                echo tun | "$ESCALATION_TOOL" tee -a /etc/modules
+            fi
+            echo ${USER}:100000:65536 | "$ESCALATION_TOOL" tee -i /etc/subuid
+            echo ${USER}:100000:65536 | "$ESCALATION_TOOL" tee -i /etc/subgid
+
+            distrobox
+
+            ;;
         *)
             printf "%b\n" "${RED}Unsupported package manager${RC}"
+            printf "%b\n" "${RED}Trying to install nightlight with Distrobox...${RC}"
+            distroboxSetup
             ;;
     esac
 }
@@ -181,12 +164,24 @@ installNightlight() {
         return 0
     fi
 
-    wget http://update.nightlight.gg/desktop/latest/linux -O nightlight-linux
-    chmod +x nightlight-linux
+    if distrobox ls | grep -q "f44"; then
+        distrobox enter f44 -- wget http://update.nightlight.gg/desktop/latest/linux -O nightlight-linux
+        distrobox enter f44 -- chmod +x nightlight-linux
+    else
+        wget http://update.nightlight.gg/desktop/latest/linux -O nightlight-linux
+        chmod +x nightlight-linux
+    fi
 
     printf "\n\n\n\n\n"
     printf "%b\n" "${YELLOW}Download Completed!${RC}"
-    printf "%b\n" "${YELLOW}Double Click nightlight-linux in the ${PWD} directory in your file manager to open nightlight${RC}"
+
+    if distrobox ls | grep -q "f44"; then
+        printf "%b\n" "${YELLOW}currently nightlight-linux in the ${PWD} directory doesn't do anything by itself.${RC}"
+        printf "%B\n" "${YELLOW}so making Nightlight show up on App Launcher is recommended on this distro.${RC}"
+    else
+        printf "%b\n" "${YELLOW}Double Click nightlight-linux in the ${PWD} directory in your file manager to open nightlight${RC}"
+    fi
+
 }
 
 setupAppLauncher() {
@@ -194,10 +189,9 @@ setupAppLauncher() {
     mkdir -p ~/.local/bin
     cp $PWD/nightlight-linux ~/.local/bin
     mkdir -p ~/.local/share/applications
-    isAlpine
-    res=$?
-    if [ $res = "1" ]; then
-        sh -c 'echo -e "[Desktop Entry]\nName=NightLight\nExec=distrobox-enter -n f44 -- $HOME/.local/bin/nightlight-linux\nTerminal=false\nTy    pe=Application" > ~/.local/share/applications/nightlight.desktop'
+
+    if distrobox ls | grep -q "f44"; then
+        sh -c 'echo -e "[Desktop Entry]\nName=NightLight\nExec=distrobox-enter -n f44 -- $HOME/.local/bin/nightlight-linux\nTerminal=false\nType=Application" > ~/.local/share/applications/nightlight.desktop'
     else
         sh -c 'echo -e "[Desktop Entry]\nName=NightLight\nExec=$HOME/.local/bin/nightlight-linux\nTerminal=false\nType=Application" > ~/.local/share/applications/nightlight.desktop'
     fi
@@ -218,11 +212,6 @@ userDecision() {
 }
 
 checkArch
-isAlpine
-res=$?
-if [ $res = "0" ]; then
-    installNightlight
-else
-    alpineSetup
-fi
+installNightlight
+alpineSetup
 userDecision
