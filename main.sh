@@ -177,7 +177,7 @@ installNightlight() {
 
     if distrobox ls | grep -q "f44"; then
         printf "%b\n" "${YELLOW}currently nightlight-linux in the ${PWD} directory doesn't do anything by itself.${RC}"
-        printf "%B\n" "${YELLOW}so making Nightlight show up on App Launcher is recommended on this distro.${RC}"
+        printf "%b\n" "${YELLOW}so making Nightlight show up on App Launcher is recommended on this distro.${RC}"
     else
         printf "%b\n" "${YELLOW}Double Click nightlight-linux in the ${PWD} directory in your file manager to open nightlight${RC}"
     fi
