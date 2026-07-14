@@ -213,5 +213,4 @@ userDecision() {
 
 checkArch
 installNightlight
-alpineSetup
 userDecision
