@@ -150,12 +150,6 @@ installDependency() {
 
 installNightlight() {
 
-    checkEscalationTool
-    checkPassword
-    checkSteamOS
-    checkPackageManager
-    installDependency
-
     if [ -e nightlight-linux ]; then
         printf "%b\n" "${RED}ERROR!${RC}"
         printf "%b\n" "${RED}There's a file/directory named [nightlight-linux] in ${PWD},${RC}"
@@ -163,6 +157,12 @@ installNightlight() {
         printf "%b\n" "${RED}as it will conflict with the downloaded file.${RC}"
         exit 1
     fi
+
+    checkEscalationTool
+    checkPassword
+    checkSteamOS
+    checkPackageManager
+    installDependency
 
     if distrobox ls | grep -q "f44"; then
         distrobox enter f44 -- wget http://update.nightlight.gg/desktop/latest/linux -O nightlight-linux
