@@ -26,7 +26,7 @@ distroboxSetup() {
         printf "%b\n" "${RED}Distrobox didn't exist, ${RC}"
         printf "%b\n" "${RED}Please install it with your package manager${RC}"
         printf "%b\n" "${RED}and run the script again afterwards.${RC}"
-        return 0
+        exit 1
     fi
 
     if ! distrobox ls | grep -q "f44"; then
@@ -161,7 +161,7 @@ installNightlight() {
         printf "%b\n" "${RED}There's a file/directory named [nightlight-linux] in ${PWD},${RC}"
         printf "%b\n" "${RED}Please rename it or remove it and run the script again${RC}"
         printf "%b\n" "${RED}as it will conflict with the downloaded file.${RC}"
-        return 0
+        exit 1
     fi
 
     if distrobox ls | grep -q "f44"; then
