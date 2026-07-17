@@ -103,8 +103,7 @@ installDependency() {
                 chmod +x $HOME/.local/bin/podman
                 "$ESCALATION_TOOL" touch /etc/subuid /etc/subgid
                 "$ESCALATION_TOOL" usermod --add-subuid 100000-165535 --add-subgid 100000-165535 $USER
-                chown $USER:$USER $HOME/.local/share/icons
-                
+
                 distroboxSetup
             else
                 "$ESCALATION_TOOL" "$PACKAGER" -S wget webkit2gtk-4.1 --noconfirm
