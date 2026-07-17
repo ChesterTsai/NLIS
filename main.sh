@@ -30,7 +30,7 @@ distroboxSetup() {
     fi
 
     if ! distrobox ls | grep -q "f44"; then
-        distrobox-create --name f44 --image fedora:44
+        distrobox-create --name f44 --image fedora:44 --yes
     fi
     distrobox enter f44 -- sudo dnf install -y wget2-wget webkit2gtk4.1
 
