@@ -69,23 +69,6 @@ checkPassword() {
 
 }
 
-checkSteamOS() {
-    if ! command_exists steamos-readonly; then
-        return 0
-    fi
-
-    if [ "$($ESCALATION_TOOL steamos-readonly status)" = "enabled" ]; then
-        printf "%b\n" "${YELLOW}Disabling readonly mode${RC}"
-        "$ESCALATION_TOOL" steamos-readonly disable
-    fi
-
-    printf "%b\n" "${YELLOW}Setting up PGP keys${RC}"
-    "$ESCALATION_TOOL" pacman-key --init
-    "$ESCALATION_TOOL" pacman-key --populate archlinux
-    "$ESCALATION_TOOL" pacman-key --populate holo
-
-}
-
 checkPackageManager() {
     ## Check Package Manager
     PACKAGEMANAGER="pacman apt-get dnf zypper rpm-ostree apk"
@@ -108,7 +91,24 @@ installDependency() {
 
     case "$PACKAGER" in
         pacman)
-            "$ESCALATION_TOOL" "$PACKAGER" -S wget webkit2gtk-4.1 --noconfirm
+            if command_exists steamos-readonly; then
+                export PATH=$HOME/.local/bin:$PATH
+                curl -s https://raw.githubusercontent.com/89luca89/distrobox/main/install | sh -s -- --prefix $HOME/.local
+                echo "xhost +si:localuser:$USER >/dev/null" | tee -a ~/.distroboxrc
+                echo "export PIPEWIRE_RUNTIME_DIR=/dev/null" | tee -a ~/.distroboxrc
+                echo "export PATH=$HOME/.local/bin:$PATH" | tee -a ~/.distroboxrc
+                echo "export PATH=$PATH:$HOME/.local/bin" | tee -a ~/.distroboxrc
+                curl -L -o $HOME/Downloads/podman-launcher-amd64 https://github.com/89luca89/podman-launcher/releases/latest/download/podman-launcher-amd64
+                mv $HOME/Downloads/podman-launcher-amd64 $HOME/.local/bin/podman
+                chmod +x $HOME/.local/bin/podman
+                "$ESCALATION_TOOL" touch /etc/subuid /etc/subgid
+                "$ESCALATION_TOOL" usermod --add-subuid 100000-165535 --add-subgid 100000-165535 $USER
+                chown $USER:$USER $HOME/.local/share/icons
+                
+                distroboxSetup
+            else
+                "$ESCALATION_TOOL" "$PACKAGER" -S wget webkit2gtk-4.1 --noconfirm
+            fi
             ;;
         dnf)
             "$ESCALATION_TOOL" "$PACKAGER" install -y wget2-wget webkit2gtk4.1
@@ -160,7 +160,6 @@ installNightlight() {
 
     checkEscalationTool
     checkPassword
-    checkSteamOS
     checkPackageManager
     installDependency
 

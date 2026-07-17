@@ -31,7 +31,7 @@ or try out dev branch (not recommended)
 - EndeavourOS
 - Manjaro
 - Omarchy
-- steamOS
+- steamOS (using [distrobox](https://github.com/89luca89/distrobox))
 
 etc.
 </details>
