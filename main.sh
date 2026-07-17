@@ -137,7 +137,7 @@ installDependency() {
             echo ${USER}:100000:65536 | "$ESCALATION_TOOL" tee -i /etc/subuid
             echo ${USER}:100000:65536 | "$ESCALATION_TOOL" tee -i /etc/subgid
 
-            distrobox
+            distroboxSetup
 
             ;;
         *)
