@@ -186,9 +186,9 @@ setupAppLauncher() {
     mkdir -p ~/.local/share/applications
 
     if distrobox ls | grep -q "f44"; then
-        sh -c 'echo -e "[Desktop Entry]\nName=NightLight\nExec=distrobox-enter -n f44 -- $HOME/.local/bin/nightlight-linux\nTerminal=false\nType=Application" > ~/.local/share/applications/nightlight.desktop'
+        curl -L -o ~/.local/share/applications/nightlight.desktop https://github.com/ChesterTsai/NLIS/raw/dev/nightlight-distrobox.desktop
     else
-        sh -c 'echo -e "[Desktop Entry]\nName=NightLight\nExec=$HOME/.local/bin/nightlight-linux\nTerminal=false\nType=Application" > ~/.local/share/applications/nightlight.desktop'
+        curl -L -o ~/.local/share/applications/nightlight.desktop https://github.com/ChesterTsai/NLIS/raw/dev/nightlight.desktop
     fi
 
 }
