@@ -63,7 +63,10 @@ checkPassword() {
 
     while [ "$(passwd -S ${USER} | awk '{print $2}')" = "NP" ]
     do
-        printf "${YELLOW}Set a password for ${USER}, you'll need it later${RC}\n"
+        printf "${YELLOW}Set a password for ${USER}, you'll need it later.${RC}\n"
+        printf "${YELLOW}Reminder: if you see nothing while typing in the password,${RC}\n"
+        printf "${YELLOW}it's completely normal, most linux OSs does that by default${RC}\n"
+        printf "${YELLOW}for security reasons, so don't panic if you can't see anything.${RC}\n"
         "$ESCALATION_TOOL" passwd ${USER}</dev/tty
     done
 
