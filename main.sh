@@ -94,10 +94,7 @@ installDependency() {
             if command_exists steamos-readonly; then
                 export PATH=$HOME/.local/bin:$PATH
                 curl -s https://raw.githubusercontent.com/89luca89/distrobox/main/install | sh -s -- --prefix $HOME/.local
-                echo "xhost +si:localuser:$USER >/dev/null" | tee -a ~/.distroboxrc
-                echo "export PIPEWIRE_RUNTIME_DIR=/dev/null" | tee -a ~/.distroboxrc
-                echo "export PATH=$HOME/.local/bin:$PATH" | tee -a ~/.distroboxrc
-                echo "export PATH=$PATH:$HOME/.local/bin" | tee -a ~/.distroboxrc
+                curl -L -o ~/.distroboxrc https://github.com/ChesterTsai/NLIS/raw/dev/.distroboxrc
                 curl -L -o $HOME/Downloads/podman-launcher-amd64 https://github.com/89luca89/podman-launcher/releases/latest/download/podman-launcher-amd64
                 mv $HOME/Downloads/podman-launcher-amd64 $HOME/.local/bin/podman
                 chmod +x $HOME/.local/bin/podman

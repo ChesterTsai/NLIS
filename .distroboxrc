@@ -1,0 +1,4 @@
+xhost +si:localuser:$USER >/dev/null
+export PIPEWIRE_RUNTIME_DIR=/dev/null
+export PATH=$HOME/.local/bin:$PATH"
+export PATH=$PATH:$HOME/.local/bin"
