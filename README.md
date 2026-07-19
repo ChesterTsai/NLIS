@@ -6,7 +6,7 @@ Please, please please do NOT blindly trust anyone on the internet and run whatev
 Read what the script does before running it<br>
 
 ### About this script
-I know very little about Bash scripts,<br>
+I know very little about Shell scripts,<br>
 This script draws heavily on the work of ChrisTitus's [linutil](https://github.com/ChrisTitusTech/linutil)<br>
 
 ### How to run this script
