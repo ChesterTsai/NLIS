@@ -189,12 +189,12 @@ setupAppLauncher() {
 
     mkdir -p ~/.local/bin
     cp $PWD/nightlight-linux ~/.local/bin
-    mkdir -p ~/.local/share/applications
 
+    mkdir -p ~/.local/share/applications
     if distrobox ls | grep -q "f44"; then
-        curl -L -o ~/.local/share/applications/nightlight.desktop https://github.com/ChesterTsai/NLIS/raw/dev/nightlight-distrobox.desktop
+        curl -L -o ~/.local/share/applications/nightlight.desktop https://github.com/ChesterTsai/NLIS/raw/dev/.local/share/applications/nightlight-distrobox.desktop
     else
-        curl -L -o ~/.local/share/applications/nightlight.desktop https://github.com/ChesterTsai/NLIS/raw/dev/nightlight.desktop
+        curl -L -o ~/.local/share/applications/nightlight.desktop https://github.com/ChesterTsai/NLIS/raw/dev/.local/share/applications/nightlight.desktop
     fi
 
 }
