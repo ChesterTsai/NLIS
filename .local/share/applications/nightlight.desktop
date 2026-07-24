@@ -1,8 +1,6 @@
 [Desktop Entry]
 Name=NightLight
 Comment=NightLight: Dead by Daylight Stats, Tools, & Icon Packs
-Exec=$HOME/.local/bin/nightlight-linux
 Terminal=false
-Icon=$HOME/.icon/nightlight/NL
 Type=Application
 Categories=Game;

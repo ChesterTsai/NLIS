@@ -186,15 +186,18 @@ setupAppLauncher() {
 
     mkdir -p ~/.icon/nightlight
     curl -L -o ~/.icon/nightlight/License_Agreement.txt https://github.com/ChesterTsai/NLIS/raw/dev/.icon/nightlight/License_Agreement.txt
+    curl -L -o ~/.icon/nightlight/NL.png https://github.com/ChesterTsai/NLIS/raw/dev/.icon/nightlight/NL.png
 
     mkdir -p ~/.local/bin
     cp $PWD/nightlight-linux ~/.local/bin
 
     mkdir -p ~/.local/share/applications
+    curl -L -o ~/.local/share/applications/nightlight.desktop https://github.com/ChesterTsai/NLIS/raw/dev/.local/share/applications/nightlight.desktop
+    cat "Icon=$HOME/.icon/nightlight/NL.png" > ~/.local/share/applications/nightlight.desktop
     if distrobox ls | grep -q "f44"; then
-        curl -L -o ~/.local/share/applications/nightlight.desktop https://github.com/ChesterTsai/NLIS/raw/dev/.local/share/applications/nightlight-distrobox.desktop
+        cat "Exec=distrobox-enter -n f44 -- $HOME/.local/bin/nightlight-linux" > ~/.local/share/applications/nightlight.desktop
     else
-        curl -L -o ~/.local/share/applications/nightlight.desktop https://github.com/ChesterTsai/NLIS/raw/dev/.local/share/applications/nightlight.desktop
+        cat "Exec=$HOME/.local/bin/nightlight-linux" > ~/.local/share/applications/nightlight.desktop
     fi
 
 }
