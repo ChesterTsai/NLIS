@@ -97,7 +97,7 @@ installDependency() {
             if command_exists steamos-readonly; then
                 export PATH=$HOME/.local/bin:$PATH
                 curl -s https://raw.githubusercontent.com/89luca89/distrobox/main/install | sh -s -- --prefix $HOME/.local
-                curl -L -o ~/.distroboxrc https://github.com/ChesterTsai/NLIS/raw/dev/.distroboxrc
+                curl -L -o $HOME/.distroboxrc https://github.com/ChesterTsai/NLIS/raw/dev/.distroboxrc
                 curl -L -o $HOME/Downloads/podman-launcher-amd64 https://github.com/89luca89/podman-launcher/releases/latest/download/podman-launcher-amd64
                 mv $HOME/Downloads/podman-launcher-amd64 $HOME/.local/bin/podman
                 chmod +x $HOME/.local/bin/podman
@@ -184,20 +184,20 @@ installNightlight() {
 
 setupAppLauncher() {
 
-    mkdir -p ~/.icon/nightlight
-    curl -L -o ~/.icon/nightlight/License_Agreement.txt https://github.com/ChesterTsai/NLIS/raw/dev/.icon/nightlight/License_Agreement.txt
-    curl -L -o ~/.icon/nightlight/NL.png https://github.com/ChesterTsai/NLIS/raw/dev/.icon/nightlight/NL.png
+    mkdir -p $HOME/.icon/nightlight
+    curl -L -o $HOME/.icon/nightlight/License_Agreement.txt https://github.com/ChesterTsai/NLIS/raw/dev/.icon/nightlight/License_Agreement.txt
+    curl -L -o $HOME/.icon/nightlight/NL.png https://github.com/ChesterTsai/NLIS/raw/dev/.icon/nightlight/NL.png
 
-    mkdir -p ~/.local/bin
-    cp $PWD/nightlight-linux ~/.local/bin
+    mkdir -p $HOME/.local/bin
+    cp $PWD/nightlight-linux $HOME/.local/bin
 
-    mkdir -p ~/.local/share/applications
-    curl -L -o ~/.local/share/applications/nightlight.desktop https://github.com/ChesterTsai/NLIS/raw/dev/.local/share/applications/nightlight.desktop
-    cat "Icon=$HOME/.icon/nightlight/NL.png" > ~/.local/share/applications/nightlight.desktop
+    mkdir -p $HOME/.local/share/applications
+    curl -L -o $HOME/.local/share/applications/nightlight.desktop https://github.com/ChesterTsai/NLIS/raw/dev/.local/share/applications/nightlight.desktop
+    cat "Icon=$HOME/.icon/nightlight/NL.png" > $HOME/.local/share/applications/nightlight.desktop
     if distrobox ls | grep -q "f44"; then
-        cat "Exec=distrobox-enter -n f44 -- $HOME/.local/bin/nightlight-linux" > ~/.local/share/applications/nightlight.desktop
+        cat "Exec=distrobox-enter -n f44 -- $HOME/.local/bin/nightlight-linux" > $HOME/.local/share/applications/nightlight.desktop
     else
-        cat "Exec=$HOME/.local/bin/nightlight-linux" > ~/.local/share/applications/nightlight.desktop
+        cat "Exec=$HOME/.local/bin/nightlight-linux" > $HOME/.local/share/applications/nightlight.desktop
     fi
 
 }
