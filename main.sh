@@ -193,11 +193,11 @@ setupAppLauncher() {
 
     mkdir -p $HOME/.local/share/applications
     curl -L -o $HOME/.local/share/applications/nightlight.desktop https://github.com/ChesterTsai/NLIS/raw/dev/.local/share/applications/nightlight.desktop
-    cat "Icon=$HOME/.icon/nightlight/NL.png" > $HOME/.local/share/applications/nightlight.desktop
+    echo "Icon=$HOME/.icon/nightlight/NL.png" >> $HOME/.local/share/applications/nightlight.desktop
     if distrobox ls | grep -q "f44"; then
-        cat "Exec=distrobox-enter -n f44 -- $HOME/.local/bin/nightlight-linux" > $HOME/.local/share/applications/nightlight.desktop
+        echo "Exec=distrobox-enter -n f44 -- $HOME/.local/bin/nightlight-linux" >> $HOME/.local/share/applications/nightlight.desktop
     else
-        cat "Exec=$HOME/.local/bin/nightlight-linux" > $HOME/.local/share/applications/nightlight.desktop
+        echo "Exec=$HOME/.local/bin/nightlight-linux" >> $HOME/.local/share/applications/nightlight.desktop
     fi
 
 }
