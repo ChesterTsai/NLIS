@@ -219,6 +219,10 @@ userDecision() {
     fi
 }
 
-checkArch
-installNightlight
-userDecision
+run_script(){
+    checkArch
+    installNightlight
+    userDecision
+}
+
+run_script
