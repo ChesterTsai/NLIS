@@ -29,8 +29,11 @@ distroboxSetup() {
         exit 1
     fi
 
+    mkdir -p $HOME/.config/containers
+    curl -L -o $HOME/.config/containers/policy.json https://github.com/ChesterTsai/NLIS/raw/dev/.config/containers/policy.json
+
     if ! distrobox ls | grep -q "f44"; then
-        distrobox-create --name f44 --image fedora:44 --yes
+        distrobox-create --name f44 --image registry.fedoraproject.org/fedora:44 --yes
     fi
     distrobox enter f44 -- sudo dnf install -y wget2-wget webkit2gtk4.1
 
