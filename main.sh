@@ -35,7 +35,7 @@ distroboxSetup() {
     if ! distrobox ls | grep -q "f44"; then
         distrobox-create --name f44 --image registry.fedoraproject.org/fedora:44 --yes
     fi
-    distrobox enter f44 -- sudo dnf install -y wget2-wget webkit2gtk4.1
+    distrobox enter f44 -- sudo dnf install -y wget2-wget webkit2gtk4.1</dev/tty
 
 }
 
@@ -104,40 +104,40 @@ installDependency() {
                 curl -L -o $HOME/Downloads/podman-launcher-amd64 https://github.com/89luca89/podman-launcher/releases/latest/download/podman-launcher-amd64
                 mv $HOME/Downloads/podman-launcher-amd64 $HOME/.local/bin/podman
                 chmod +x $HOME/.local/bin/podman
-                "$ESCALATION_TOOL" touch /etc/subuid /etc/subgid
-                "$ESCALATION_TOOL" usermod --add-subuid 100000-165535 --add-subgid 100000-165535 $USER
+                "$ESCALATION_TOOL" touch /etc/subuid /etc/subgid</dev/tty
+                "$ESCALATION_TOOL" usermod --add-subuid 100000-165535 --add-subgid 100000-165535 $USER</dev/tty
 
                 distroboxSetup
             else
-                "$ESCALATION_TOOL" "$PACKAGER" -S wget webkit2gtk-4.1 --noconfirm
+                "$ESCALATION_TOOL" "$PACKAGER" -S wget webkit2gtk-4.1 --noconfirm</dev/tty
             fi
             ;;
         dnf)
-            "$ESCALATION_TOOL" "$PACKAGER" install -y wget2-wget webkit2gtk4.1
+            "$ESCALATION_TOOL" "$PACKAGER" install -y wget2-wget webkit2gtk4.1</dev/tty
             ;;
         rpm-ostree)
             "$PACKAGER" install -y wget2-wget webkit2gtk4.1
             printf "%b\n" "${YELLOW}you might need to restart.${RC}"
             ;;
         apt-get|zypper)
-            "$ESCALATION_TOOL" "$PACKAGER" install -y wget webkit2gtk-4.1
+            "$ESCALATION_TOOL" "$PACKAGER" install -y wget webkit2gtk-4.1</dev/tty
             ;;
         apk)
             str=$(tail -n 1 /etc/apk/repositories)
             if [[ $str == "#"* ]] && [[ $str == *"/community" ]]; then
                 new_str=${str:1}
-                echo $new_str | "$ESCALATION_TOOL" tee -a /etc/apk/repositories
-                "$ESCALATION_TOOL" "$PACKAGER" update
+                echo $new_str | "$ESCALATION_TOOL" tee -a /etc/apk/repositories</dev/tty
+                "$ESCALATION_TOOL" "$PACKAGER" update</dev/tty
             fi
 
-            "$ESCALATION_TOOL" "$PACKAGER" add distrobox crun --no-interactive
-            "$ESCALATION_TOOL" modprobe tun
+            "$ESCALATION_TOOL" "$PACKAGER" add distrobox crun --no-interactive</dev/tty
+            "$ESCALATION_TOOL" modprobe tun</dev/tty
 
             if ! grep -q tun /etc/modules; then
-                echo tun | "$ESCALATION_TOOL" tee -a /etc/modules
+                echo tun | "$ESCALATION_TOOL" tee -a /etc/modules</dev/tty
             fi
-            echo ${USER}:100000:65536 | "$ESCALATION_TOOL" tee -i /etc/subuid
-            echo ${USER}:100000:65536 | "$ESCALATION_TOOL" tee -i /etc/subgid
+            echo ${USER}:100000:65536 | "$ESCALATION_TOOL" tee -i /etc/subuid</dev/tty
+            echo ${USER}:100000:65536 | "$ESCALATION_TOOL" tee -i /etc/subgid</dev/tty
 
             distroboxSetup
 
@@ -207,7 +207,8 @@ setupAppLauncher() {
 
 userDecision() {
 
-    read -p "Do you want Nightlight to show up in your app launcher? (y/n) [n] " appla</dev/tty
+    printf "%b" "Do you want Nightlight to show up in your app launcher? (y/n) [n] "
+    read -r appla
     if [ "$appla" = "y" ] || [ "$appla" = "Y" ]; then
         setupAppLauncher
         printf "%b\n" "${YELLOW}Done!${RC}"
