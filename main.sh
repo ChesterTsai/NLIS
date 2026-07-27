@@ -32,10 +32,10 @@ distroboxSetup() {
     mkdir -p $HOME/.config/containers
     curl -L -o $HOME/.config/containers/policy.json https://github.com/ChesterTsai/NLIS/raw/dev/.config/containers/policy.json
 
-    if ! distrobox ls | grep -q "f44"; then
-        distrobox-create --name f44 --image registry.fedoraproject.org/fedora:44 --yes
+    if ! distrobox ls | grep -q "f44-nightlight"; then
+        distrobox-create --name f44-nightlight --image registry.fedoraproject.org/fedora:44 --yes
     fi
-    distrobox enter f44 -- sudo dnf install -y wget2-wget webkit2gtk4.1</dev/tty
+    distrobox enter f44-nightlight -- sudo dnf install -y wget2-wget webkit2gtk4.1</dev/tty
 
 }
 
@@ -165,9 +165,9 @@ installNightlight() {
     checkPackageManager
     installDependency
 
-    if distrobox ls | grep -q "f44"; then
-        distrobox enter f44 -- wget http://update.nightlight.gg/desktop/latest/linux -O nightlight-linux
-        distrobox enter f44 -- chmod +x nightlight-linux
+    if distrobox ls | grep -q "f44-nightlight"; then
+        distrobox enter f44-nightlight -- wget http://update.nightlight.gg/desktop/latest/linux -O nightlight-linux
+        distrobox enter f44-nightlight -- chmod +x nightlight-linux
     else
         wget http://update.nightlight.gg/desktop/latest/linux -O nightlight-linux
         chmod +x nightlight-linux
@@ -197,8 +197,8 @@ setupAppLauncher() {
     mkdir -p $HOME/.local/share/applications
     curl -L -o $HOME/.local/share/applications/nightlight.desktop https://github.com/ChesterTsai/NLIS/raw/dev/.local/share/applications/nightlight.desktop
     echo "Icon=$HOME/.icon/nightlight/NL.png" >> $HOME/.local/share/applications/nightlight.desktop
-    if distrobox ls | grep -q "f44"; then
-        echo "Exec=distrobox-enter -n f44 -- $HOME/.local/bin/nightlight-linux" >> $HOME/.local/share/applications/nightlight.desktop
+    if distrobox ls | grep -q "f44-nightlight"; then
+        echo "Exec=distrobox-enter -n f44-nightlight -- $HOME/.local/bin/nightlight-linux" >> $HOME/.local/share/applications/nightlight.desktop
     else
         echo "Exec=$HOME/.local/bin/nightlight-linux" >> $HOME/.local/share/applications/nightlight.desktop
     fi
