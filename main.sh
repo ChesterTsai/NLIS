@@ -98,7 +98,7 @@ installDependency() {
     case "$PACKAGER" in
         pacman)
             if command_exists steamos-readonly; then
-                export PATH=$HOME/.local/bin:$PATH >> $HOME/.bashrc
+                echo "export PATH=$HOME/.local/bin:$PATH" >> $HOME/.bashrc
                 curl -s https://raw.githubusercontent.com/89luca89/distrobox/main/install | sh -s -- --prefix $HOME/.local
                 curl -L -o $HOME/.distroboxrc https://github.com/ChesterTsai/NLIS/raw/dev/.distroboxrc
                 curl -L -o $HOME/Downloads/podman-launcher-amd64 https://github.com/89luca89/podman-launcher/releases/latest/download/podman-launcher-amd64
