@@ -100,6 +100,7 @@ installDependency() {
             if command_exists steamos-readonly; then
                 if ! grep -q "export PATH=$HOME/.local/bin:$PATH" $HOME/.bashrc; then
                     echo "export PATH=$HOME/.local/bin:$PATH" >> $HOME/.bashrc
+                    export PATH=$HOME/.local/bin:$PATH
                 fi
                 curl -s https://raw.githubusercontent.com/89luca89/distrobox/main/install | sh -s -- --prefix $HOME/.local
                 curl -L -o $HOME/.distroboxrc https://github.com/ChesterTsai/NLIS/raw/dev/.distroboxrc
