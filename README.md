@@ -78,3 +78,8 @@ etc.
 - Alpine Linux (using [distrobox](https://github.com/89luca89/distrobox))
 
 </details>
+
+### Other Info
+If github is somehow dead again(which happens quite often recently), you can still access the repo with gitea<br>
+Mirror Repo: [Gitea](https://gitea.com/ChesterTsai/NLIS)<br>
+Even though Gitea is a Mirrored Repo of Github, I'll still accept PRs, Issues, and other things everywhere as long as you're able to contact me.
