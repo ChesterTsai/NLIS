@@ -195,7 +195,7 @@ setupAppLauncher() {
     curl -L -o $HOME/.icon/nightlight/NL.png https://github.com/ChesterTsai/NLIS/raw/dev/.icon/nightlight/NL.png
 
     mkdir -p $HOME/.local/bin
-    cp $PWD/nightlight-linux $HOME/.local/bin
+    mv $PWD/nightlight-linux $HOME/.local/bin
 
     mkdir -p $HOME/.local/share/applications
     curl -L -o $HOME/.local/share/applications/nightlight.desktop https://github.com/ChesterTsai/NLIS/raw/dev/.local/share/applications/nightlight.desktop
