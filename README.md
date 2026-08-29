@@ -5,6 +5,8 @@ This script is NOT an offical nightlight-linux installation script, although the
 Please, please please do NOT blindly trust anyone on the internet and run whatever script they give you<br>
 Read what the script does before running it<br>
 
+![Preview](/Preview.gif)
+
 ### About this script
 I know very little about Shell scripts,<br>
 This script draws heavily on the work of ChrisTitus's [linutil](https://github.com/ChrisTitusTech/linutil)<br>
