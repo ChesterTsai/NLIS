@@ -18,13 +18,13 @@ userDecision() {
     read -p "Select a feature you want to run: [1]" feature</dev/tty
     case "$feature" in
         "2")
-            curl -fsSL https://github.com/ChesterTsai/NLIS/raw/dev/setupAppLauncher.sh | sh</dev/tty
+            curl -fsSL https://github.com/ChesterTsai/NLIS/raw/dev/features/setupAppLauncher.sh | sh</dev/tty
             ;;
         "3")
-            curl -fsSL https://github.com/ChesterTsai/NLIS/raw/dev/removeAppLauncher.sh | sh</dev/tty
+            curl -fsSL https://github.com/ChesterTsai/NLIS/raw/dev/features/removeAppLauncher.sh | sh</dev/tty
             ;;
         *)
-            curl -fsSL https://github.com/ChesterTsai/NLIS/raw/dev/installNightLight.sh | sh</dev/tty
+            curl -fsSL https://github.com/ChesterTsai/NLIS/raw/dev/features/installNightLight.sh | sh</dev/tty
             ;;
     esac
 }
