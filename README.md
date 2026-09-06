@@ -1,4 +1,4 @@
-![Preview](/Preview.mov)
+![Preview](/Preview.mp4)
 
 # THIS IS NOT AN OFFICAL NIGHTLIGHT SCRIPT
 This script is NOT an offical nightlight-linux installation script, although the devoleper behind Nightlight(Boop), has acknowledged that I have made this script, and stars me for it, it's still NOT an offical supported script in any kind, take this risk into account before running it.
