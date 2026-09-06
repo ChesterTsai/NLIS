@@ -15,16 +15,16 @@ userDecision() {
     echo "[1] Install Nightlight on Linux"
     echo "[2] Make Nightlight show up in App Launcher"
     echo "[3] Remove Nightlight from App Launcher"
-    read -p "Select a feature you want to run: [1]" feature</dev/tty
+    read -p "Select a feature you want to run: [1] " feature</dev/tty
     case "$feature" in
         "2")
-            curl -fsSL https://github.com/ChesterTsai/NLIS/raw/dev/features/setupAppLauncher.sh | sh</dev/tty
+            (curl -fsSL https://github.com/ChesterTsai/NLIS/raw/dev/features/setupAppLauncher.sh | sh)</dev/tty
             ;;
         "3")
-            curl -fsSL https://github.com/ChesterTsai/NLIS/raw/dev/features/removeAppLauncher.sh | sh</dev/tty
+            (curl -fsSL https://github.com/ChesterTsai/NLIS/raw/dev/features/removeAppLauncher.sh | sh)</dev/tty
             ;;
         *)
-            curl -fsSL https://github.com/ChesterTsai/NLIS/raw/dev/features/installNightLight.sh | sh</dev/tty
+            (curl -fsSL https://github.com/ChesterTsai/NLIS/raw/dev/features/installNightLight.sh | sh)</dev/tty
             ;;
     esac
 }
