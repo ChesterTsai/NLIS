@@ -161,7 +161,7 @@ installNightlight() {
     checkPackageManager
     installDependency
 
-    if distrobox ls | grep -q "f44-nightlight"; then
+    if [ command_exists distrobox ] && [ distrobox ls | grep -q "f44-nightlight" ]; then
         distrobox enter f44-nightlight -- wget http://update.nightlight.gg/desktop/latest/linux -O nightlight-linux
         distrobox enter f44-nightlight -- chmod +x nightlight-linux
     else
@@ -172,7 +172,7 @@ installNightlight() {
     printf "\n\n\n\n\n"
     printf "%b\n" "${YELLOW}Download Completed!${RC}"
 
-    if distrobox ls | grep -q "f44"; then
+    if [ command_exists distrobox ] && [ distrobox ls | grep -q "f44-nightlight" ]; then
         printf "%b\n" "${YELLOW}currently nightlight-linux in the ${PWD} directory doesn't do anything by itself.${RC}"
         printf "%b\n" "${YELLOW}so making Nightlight show up on App Launcher is recommended on this distro.${RC}"
     else
